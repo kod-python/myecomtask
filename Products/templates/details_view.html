@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Product Details</title>
+  </head>
+  <body>
+    <h1>Product Details</h1>
+
+    <ul class="product-list">
+      {% for product in products %}
+      <li class="product-item">
+    
+        <h2>{{ product.name }}</h2>
+        <p>{{ product.desc}}</p>
+        <p>Price: ${{ product.prize }}</p>
+        <a href="#" class="buy-now-button">Buy Now</a>
+        <a href="{% url 'shop' %}">Back to shop</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
