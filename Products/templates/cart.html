@@ -38,6 +38,17 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
   </head>
 
+
+  <style>
+input{
+  border: none;
+  width: 70px;
+  border-style: none!important;
+  outline-color: rgb(255, 255, 255)
+}
+    
+  </style>
+
   <body>
     <!-- Spinner Start -->
     <div
@@ -91,10 +102,8 @@
           <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
             <div class="navbar-nav mx-auto">
               <a href="/" class="nav-item nav-link">Home</a>
-              <a href="shop.html" class="nav-item nav-link">Shop</a>
-              <a href="shop-detail.html" class="nav-item nav-link"
-                >Shop Detail</a
-              >
+              <a href="{% url 'shop' %}" class="nav-item nav-link">Shop</a>
+              <a href="#" class="nav-item nav-link">Shop Detail</a>
               <div class="nav-item dropdown">
                 <a
                   href="#"
@@ -121,13 +130,13 @@
               >
                 <i class="fas fa-search text-primary"></i>
               </button>
-              {% for item in product %}
+
               <a href="#" class="position-relative me-4 my-auto">
                 <i class="fa fa-shopping-bag fa-2x"></i>
                 <span
                   class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                   style="top: -5px; left: 15px; height: 20px; min-width: 20px"
-                  >{{item.products.count}}</span
+                  >{{product_count}}</span
                 >
               </a>
               <a href="#" class="my-auto">
@@ -194,6 +203,7 @@
     <div class="container-fluid py-5">
       <div class="container py-5">
         <div class="table-responsive">
+          {% for item in cart %}
           <table class="table">
             <thead>
               <tr>
@@ -202,15 +212,18 @@
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Total</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Update</th>
+              
+                <th scope="col">Remove</th>
               </tr>
             </thead>
+
             <tbody>
               <tr>
                 <th scope="row">
                   <div class="d-flex align-items-center">
                     <img
-                      src="{{item.image.url}}"
+                      src="{{item.product.image.url}}"
                       class="img-fluid me-5 rounded-circle"
                       style="width: 80px; height: 80px"
                       alt=""
@@ -218,154 +231,68 @@
                   </div>
                 </th>
                 <td>
-                  <p class="mb-0 mt-4">{{item.name}}</p>
+                  <p class="mb-0 mt-4">{{item.product.name}}</p>
                 </td>
                 <td>
-                  <p class="mb-0 mt-4">{{item.prize}} $</p>
+                  <p class="mb-0 mt-4">{{item.price}} $</p>
                 </td>
                 <td>
                   <div class="input-group quantity mt-4" style="width: 100px">
-                    <div class="input-group-btn">
-                      <button
-                        class="btn btn-sm btn-minus rounded-circle bg-light border"
-                      >
-                        <i class="fa fa-minus"></i>
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm text-center border-0"
-                      value="1"
-                    />
-                    <div class="input-group-btn">
-                      <button
-                        class="btn btn-sm btn-plus rounded-circle bg-light border"
-                      >
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </div>
+                    <div class="input-group-btn">{{item.quantity}}</div>
                   </div>
+
+                 
                 </td>
+
                 <td>
-                  <p class="mb-0 mt-4">{{item.prize}} $</p>
+                  <p class="mb-0 mt-4">{{item.total_price}} $</p>
                 </td>
+
                 <td>
-                  <button
+                  <form method="post" action="{% url 'update_cart' item.product.id %}" class="mb-0 mt-4">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+
+
+                    
+                  
+                  <button type="submit" class="btn border-secondary">Update</button>
+                  </form>
+                         
+                </td>
+
+                <td>
+
+                  <form method="post" action="{% url 'remove_from_cart' item.product.id %}">
+                    {% csrf_token %}
+                    <button type="submit"
                     class="btn btn-md rounded-circle bg-light border mt-4"
                   >
+
+                  
                     <i class="fa fa-times text-danger"></i>
                   </button>
+                   
+                  </form>    
+                  
+
+
+              
                 </td>
               </tr>
-              {% endfor %}
-              <!--               
-              <tr>
-                <th scope="row">
-                  <div class="d-flex align-items-center">
-                    <img
-                      src="img/vegetable-item-5.jpg"
-                      class="img-fluid me-5 rounded-circle"
-                      style="width: 80px; height: 80px"
-                      alt=""
-                      alt=""
-                    />
-                  </div>
-                </th>
-                <td>
-                  <p class="mb-0 mt-4">Potatoes</p>
-                </td>
-                <td>
-                  <p class="mb-0 mt-4">2.99 $</p>
-                </td>
-                <td>
-                  <div class="input-group quantity mt-4" style="width: 100px">
-                    <div class="input-group-btn">
-                      <button
-                        class="btn btn-sm btn-minus rounded-circle bg-light border"
-                      >
-                        <i class="fa fa-minus"></i>
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm text-center border-0"
-                      value="1"
-                    />
-                    <div class="input-group-btn">
-                      <button
-                        class="btn btn-sm btn-plus rounded-circle bg-light border"
-                      >
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="mb-0 mt-4">2.99 $</p>
-                </td>
-                <td>
-                  <button
-                    class="btn btn-md rounded-circle bg-light border mt-4"
-                  >
-                    <i class="fa fa-times text-danger"></i>
-                  </button>
-                </td>
-              </tr> -->
-              <!-- <tr>
-                <th scope="row">
-                  <div class="d-flex align-items-center">
-                    <img
-                      src="{% static 'img/vegetable-item-2.jpg' %}"
-                      class="img-fluid me-5 rounded-circle"
-                      style="width: 80px; height: 80px"
-                      alt=""
-                      alt=""
-                    />
-                  </div>
-                </th>
-                <td>
-                  <p class="mb-0 mt-4">Awesome Brocoli</p>
-                </td>
-                <td>
-                  <p class="mb-0 mt-4">2.99 $</p>
-                </td>
-                <td>
-                  <div class="input-group quantity mt-4" style="width: 100px">
-                    <div class="input-group-btn">
-                      <button
-                        class="btn btn-sm btn-minus rounded-circle bg-light border"
-                      >
-                        <i class="fa fa-minus"></i>
-                      </button>
-                    </div>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm text-center border-0"
-                      value="1"
-                    />
-                    <div class="input-group-btn">
-                      <button
-                        class="btn btn-sm btn-plus rounded-circle bg-light border"
-                      >
-                        <i class="fa fa-plus"></i>
-                      </button>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <p class="mb-0 mt-4">2.99 $</p>
-                </td>
-                <td>
-                  <button
-                    class="btn btn-md rounded-circle bg-light border mt-4"
-                  >
-                    <i class="fa fa-times text-danger"></i>
-                  </button>
-                </td>
-              </tr> -->
             </tbody>
           </table>
+          {% endfor %}
         </div>
+       
+        <form method="post" action="{% url 'clear_cart' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn border-secondary">Clear Cart</button>
+        </form>
+        
+
+
+
         <div class="mt-5">
           <input
             type="text"
@@ -387,23 +314,26 @@
                 <h1 class="display-6 mb-4">
                   Cart <span class="fw-normal">Total</span>
                 </h1>
+
+                <!-- {% for item in cart %}
                 <div class="d-flex justify-content-between mb-4">
                   <h5 class="mb-0 me-4">Subtotal:</h5>
-                  <p class="mb-0">$96.00</p>
+                  <p class="mb-0">{{item.total_price}} Ghc</p>
                 </div>
-                <div class="d-flex justify-content-between">
+                {% endfor %} -->
+                <!-- <div class="d-flex justify-content-between">
                   <h5 class="mb-0 me-4">Shipping</h5>
                   <div class="">
                     <p class="mb-0">Flat rate: $3.00</p>
                   </div>
-                </div>
-                <p class="mb-0 text-end">Shipping to Ukraine.</p>
+                </div> -->
+                <!-- <p class="mb-0 text-end">Shipping to Ukraine.</p> -->
               </div>
               <div
                 class="py-4 mb-4 border-top border-bottom d-flex justify-content-between"
               >
                 <h5 class="mb-0 ps-4 me-4">Total</h5>
-                <p class="mb-0 pe-4">$99.00</p>
+                <p class="mb-0 pe-4">{{cart.get_total_price}} Ghc</p>
               </div>
               <button
                 class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
@@ -416,6 +346,7 @@
         </div>
       </div>
     </div>
+   
     <!-- Cart Page End -->
 
     <!-- Footer Start -->
@@ -571,6 +502,9 @@
     <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
 
     <!-- Template Javascript -->
+
+    <script src="{% static 'js/jquery-3.7.1.min.js'%}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
   </body>
 </html>

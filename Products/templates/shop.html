@@ -134,7 +134,7 @@
                 <span
                   class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                   style="top: -5px; left: 15px; height: 20px; min-width: 20px"
-                  >3</span
+                  >{{product_count}}</span
                 >
               </a>
               <a href="#" class="my-auto">
@@ -443,7 +443,7 @@
                           <!-- <p class="text-dark fs-5 fw-bold mb-0">{{product.prize}}/kg</p> -->
 
                           <a
-                            href="#"
+                            href="{% url 'shop_detail' product.id %}"
                             class="btn border border-secondary rounded-pill px-3 text-primary"
                             ><i
                               class="fa fa-shopping-bag me-2 text-primary"

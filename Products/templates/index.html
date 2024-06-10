@@ -127,8 +127,8 @@
               <a href="contact.html" class="nav-item nav-link">Contact</a>
             </div>
           
-            <a href="{% url 'cart_detail' %}" class="nav-item nav-link">add-to cart</a>
-            <a href="{% url 'cart_add' %}">product trial</a>
+            
+         
             <div class="d-flex m-3 me-0">
               <button
                 class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
@@ -142,7 +142,7 @@
                 <span
                   class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                   style="top: -5px; left: 15px; height: 20px; min-width: 20px"
-                  >3</span
+                  >{{product_count}}</span
                 >
               </a>
               <a href="#" class="my-auto">
@@ -434,8 +434,6 @@
                        
                          
                           </div>
-
-                          <button type="button" class="btn btn-secondary" value="{{product.id}}" id="add-cart">Add to Cart</button>
                         </div>
                       </div>
                     </div>
@@ -1029,6 +1027,5 @@
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/jquery-3.7.1.min.js'}"></script>
-    <script src="{% static 'js/button.js' %}"></script>
   </body>
 </html>
