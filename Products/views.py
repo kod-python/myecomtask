@@ -6,9 +6,10 @@ from .models import Product
 from .models import Category
 from .cart import Cart
 from django.http import JsonResponse
-
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+# from .models import Order, OrderItem 
+import uuid
 
 
 # Create your views here
@@ -63,6 +64,13 @@ def shop_detail(request, id):
     return render(request, 'shop_detail.html', {'products': products, 'featureall':featureall,'product_count':product_count})
 
 
+def chackout(request):
+    
+    product = Product.objects.all()
+    cart = Cart(request)
+    product_count = cart.get_product_count()
+    return render(request, 'chackout.html', {'cart':cart, 'product':product, 'product_count':product_count})
+
 
 
 
@@ -88,6 +96,66 @@ def add_to_cart(request, id):
     
     messages.success(request, "Product added to cart successfully")
     return redirect('cart')
+
+
+
+
+
+# def proceed_checkout(request):
+#     cart = Cart(request)
+#     if not cart:
+#         messages.error(request, "Your cart is empty")
+#         return redirect('cart')
+    
+   
+#     total = sum(item['price'] * item['quantity'] for item in cart)
+    
+  
+#     order = Order.objects.create(
+#         user=request.user,
+#         total=total,
+#         order_number=str(uuid.uuid4())
+#     )
+    
+  
+#     for item in cart:
+#         OrderItem.objects.create(
+#             order=order,
+#             product=item['product'],
+#             quantity=item['quantity'],
+#             price=item['price']
+#         )
+    
+  
+#     cart.clear()
+
+#     messages.success(request, "Order placed successfully")
+#     return redirect('order_confirmation', order_id=order.id) 
+
+
+
+
+
+
+
+
+
+
+def proceed_checkout(request):
+    cart = Cart(request)
+    if not cart:
+        messages.error(request, "Your cart is empty")
+        return redirect('cart')
+    
+
+    messages.success(request, "Proceeding to checkout")
+    return redirect('chackout')
+
+
+
+
+
+
 
 
 def update_cart(request, product_id):
@@ -126,7 +194,7 @@ def clear_cart(request):
 def register(request):
     if request.method == 'POST':
         username = request.POST['username']
-        # email = request.POST.get['email']
+        
         password = request.POST['password']
         password2 = request.POST['password2']
         

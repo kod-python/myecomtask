@@ -6,6 +6,18 @@
         h5{
             color:red
         }
+
+        input{
+            display:grid;
+            padding:5px;
+            margin: 10px;
+        }
+
+
+        textarea{
+            display: grid;
+            margin: 10px;
+        }
     </style>
 
     {% for message in messages%}
@@ -17,9 +29,45 @@
          {% csrf_token %}
         <p>username</p>
         <input type="text" name="username" required>
-        {% comment %} <p>email</p>
 
-        <input type="email" name="email"> {% endcomment %}
+        <p>First Name</p>
+        <input type="text" name="first_name" required>
+
+
+        <p>Last Name</p>
+        <input type="text" name="last_name" required>
+
+        <p>Company Name</p>
+        <input type="text" name="company_name" required>
+
+        <p>Adress</p>
+        <input type="text" name="address" required>
+
+        <p>Town/City</p>
+        <input type="text" name="town" required>
+
+        <p>Country</p>
+        <input type="text" name="country" required>
+
+        <p>Postcode/Zip</p>
+        <input type="text" name="postcode" required>
+
+        <p>Mobile</p>
+        <input type="phone" name="phone" required>
+
+        <p>Email Address</p>
+        <input type="email" name="email" required>
+
+       
+        <!-- <input type="checkbox" name="username" required>Create account?
+
+       
+        <input type="checkbox" name="username" required>Ship to a different address? -->
+
+       
+        <textarea name="order-notes" id="" placeholder="Ordered Note(Optional)"></textarea>
+       
+       
 
         <p>password</p>
 
@@ -27,7 +75,9 @@
 
         <p>repeat password</p>
 
-        <input type="password" name="password2" required> <br>
+        <input type="password" name="password2" required> 
+
+
 
      <input type = "submit"> <p>if you already have an account <a href="login">Login</a>
     </form>

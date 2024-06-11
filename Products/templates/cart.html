@@ -335,12 +335,22 @@ input{
                 <h5 class="mb-0 ps-4 me-4">Total</h5>
                 <p class="mb-0 pe-4">{{cart.get_total_price}} Ghc</p>
               </div>
-              <button
-                class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
-                type="button"
-              >
-                Proceed Checkout
-              </button>
+
+
+             <form action="{% url 'procced_checkout'  %}" method="post">
+              {% csrf_token %}
+              <button type="submit"
+              class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+              type="button"
+            >
+              Proceed Checkout
+            </button>
+
+
+             </form>
+
+
+        
             </div>
           </div>
         </div>
