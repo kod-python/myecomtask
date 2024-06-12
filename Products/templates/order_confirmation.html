@@ -9,6 +9,57 @@
     <h1>Order Confirmation</h1>
     <p>Thank you for your order!</p>
     <p>Order ID: {{ order.id }}</p> 
+    <p>first_name: {{ order.first_name }}</p>
+    <p>last_name: {{ order.last_name }}</p>
+    <p>company: {{ order.company_name }}</p>
+    <p>Address: {{ order.address }}</p>
+    <p>House number: {{ order.house_number_street_name }}</p>
+    <p>town_city : {{ order.town_city  }}</p>
+    <p>country : {{ order.country  }}</p>
+    <p>mobile  : {{ order.mobile   }}</p>
+    <p>email_address : {{ order.email_address  }}</p>
+    <p> payment_method  : {{ order.payment_method   }}</p>
+
+    {% for item in cart %}
+ 
+    <p>Sub Total:{{ item.total_price }}</p> 
+  
+{% endfor %}
+
+
+
+    <a href="{% url 'index' %}">continue shopping </a>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body>
+
+    <h1>Order Confirmation</h1>
+    <p>Thank you for your order!</p>
+    <p>Order ID: {{ order.id }}</p> 
+    <p>Total Price: {{cart.get_total_price}}</p>
     <p>Total Price: {{cart.get_total_price}}</p>
     <p>Shipping Address: {{ order.shipping_address }}</p>
     <p>Billing Address: {{ order.billing_address }}</p>
@@ -16,4 +67,40 @@
 
     <a href="{% url 'index' %}">continue shopping </a>
 </body>
-</html>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+</head>
+<body>
+
+    <h1>Order Confirmation</h1>
+    <p>Thank you for your order!</p>
+    <p>Order ID: {{ order.id }}</p> 
+    <p>Total Price: {{cart.get_total_price}}</p>
+    <p>Shipping Address: {{ order.shipping_address }}</p>
+    <p>Billing Address: {{ order.billing_address }}</p>
+    <p>Payment Method: {{ order.payment_method }}</p>
+
+    <a href="{% url 'index' %}">continue shopping </a>
+</body>
+</html> {% endcomment %}

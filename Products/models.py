@@ -60,12 +60,18 @@ class OrderItem(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    shipping_address = models.CharField(max_length=255)
-    billing_address = models.CharField(max_length=255)
-    payment_method = models.CharField(max_length=50, default='Credit-Card/Debit-Card')
-    
-    
+    first_name = models.CharField(max_length=50, default='first_name')
+    last_name = models.CharField(max_length=50, default='last_name')
+    company_name = models.CharField(max_length=100, blank=True, null=True)
+    address = models.TextField(default=False)
+    house_number_street_name = models.CharField(max_length=100, default=1)
+    town_city = models.CharField(max_length=50, default=1)
+    country = models.CharField(max_length=50, default=1)
+    postcode_zip = models.CharField(max_length=20, default=1)
+    mobile = models.CharField(max_length=20, default=1)
+    email_address = models.EmailField(default=False)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, default=False)
+    payment_method = models.CharField(max_length=200, default='card')
     
 
     def get_absolute_url(self):
