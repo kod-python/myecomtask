@@ -2,6 +2,7 @@ from typing import Any
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.urls import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -46,18 +47,28 @@ class Product(models.Model):
         return self.quantity * self.prize
 
 
-# class Order(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     order_number = models.CharField(max_length=100, unique=True, default=uuid.uuid4)
-#     created = models.DateTimeField(auto_now_add=True)
-#     shipping_address = models.TextField()
-#     billing_address = models.TextField()
-#     total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
 
 
-# class OrderItem(models.Model):
-#     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     quantity = models.PositiveIntegerField()
-#     price = models.DecimalField(max_digits=10, decimal_places=2)
+class Carts(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+class OrderItem(models.Model):
+    cart = models.ForeignKey(Carts, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    shipping_address = models.CharField(max_length=255)
+    billing_address = models.CharField(max_length=255)
+    payment_method = models.CharField(max_length=50, default='Credit-Card/Debit-Card')
+    
+    
+    
+
+    def get_absolute_url(self):
+         return reverse("course:verify-payment", kwargs={
+            "ref": self.ref,
+        })

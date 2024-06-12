@@ -8,8 +8,9 @@ from .cart import Cart
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-# from .models import Order, OrderItem 
+from .models import Order, OrderItem ,Carts
 import uuid
+from .forms import CheckoutForm
 
 
 # Create your views here
@@ -64,12 +65,51 @@ def shop_detail(request, id):
     return render(request, 'shop_detail.html', {'products': products, 'featureall':featureall,'product_count':product_count})
 
 
-def chackout(request):
+def order_confirmation(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    cart = Cart(request)
     
+    return render(request, 'order_confirmation.html', {'order': order, 'cart':cart})
+
+
+
+
+def chackout(request):
     product = Product.objects.all()
     cart = Cart(request)
     product_count = cart.get_product_count()
-    return render(request, 'chackout.html', {'cart':cart, 'product':product, 'product_count':product_count})
+    
+    
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            shipping_address = form.cleaned_data['shipping_address']
+            billing_address = form.cleaned_data['billing_address']
+            payment_method = form.cleaned_data['payment_method']
+
+          
+            cart = get_object_or_404(Carts, user=request.user)
+            cart_items = OrderItem.objects.filter(cart=cart)
+
+        
+            total_price = sum(item.product.price * item.quantity for item in cart_items)
+
+            order = Order.objects.create(
+                user=request.user,
+                total_price=total_price,
+                shipping_address=shipping_address,
+                billing_address=billing_address,
+                payment_method=payment_method
+            )
+
+         
+            cart_items.delete()
+
+            return redirect('order_confirmation', order_id=order.id)
+    else:
+        form = CheckoutForm()
+    
+    return render(request, 'chackout.html',{'cart':cart, 'form':form, 'product':product, 'product_count':product_count})
 
 
 
@@ -101,44 +141,6 @@ def add_to_cart(request, id):
 
 
 
-# def proceed_checkout(request):
-#     cart = Cart(request)
-#     if not cart:
-#         messages.error(request, "Your cart is empty")
-#         return redirect('cart')
-    
-   
-#     total = sum(item['price'] * item['quantity'] for item in cart)
-    
-  
-#     order = Order.objects.create(
-#         user=request.user,
-#         total=total,
-#         order_number=str(uuid.uuid4())
-#     )
-    
-  
-#     for item in cart:
-#         OrderItem.objects.create(
-#             order=order,
-#             product=item['product'],
-#             quantity=item['quantity'],
-#             price=item['price']
-#         )
-    
-  
-#     cart.clear()
-
-#     messages.success(request, "Order placed successfully")
-#     return redirect('order_confirmation', order_id=order.id) 
-
-
-
-
-
-
-
-
 
 
 def proceed_checkout(request):
@@ -153,7 +155,9 @@ def proceed_checkout(request):
 
 
 
-
+def testimonial(request):
+    
+    return render(request, 'testimonial.html')
 
 
 

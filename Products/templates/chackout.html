@@ -382,11 +382,11 @@
                         </div>
                       </td>
                     </tr>  -->
-
+                    {% endfor %}
                     <tr>
                       <th scope="row"></th>
                       <td class="py-5">
-                        <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
+                        <p class="mb-0 text-dark text-uppercase py-3">SUB TOTAL</p>
                       </td>
                       <td class="py-5"></td>
                       <td class="py-5"></td>
@@ -400,7 +400,7 @@
                 </table>
                
               </div>
-              {% endfor %}
+            
               <div
                 class="row g-4 text-center align-items-center justify-content-center border-bottom py-3"
               >
@@ -485,12 +485,22 @@
               <div
                 class="row g-4 text-center align-items-center justify-content-center pt-4"
               >
-                <button
+                <!-- <button
                   type="button"
                   class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary"
                 >
                   Place Order
-                </button>
+                </button> -->
+
+
+
+                <form method="POST" action="{% url 'chackout' %}">
+                  {% csrf_token %}
+                  <!-- {{ form.as_p }} -->
+                  <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
+              </form>
+
+
               </div>
             </div>
           </div>
