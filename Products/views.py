@@ -65,11 +65,22 @@ def shop_detail(request, id):
     return render(request, 'shop_detail.html', {'products': products, 'featureall':featureall,'product_count':product_count})
 
 
+# def order_confirmation(request):
+#     # order = get_object_or_404(Order, id=order_id)
+#     cart = Cart(request)
+    
+#     return render(request, 'order_confirmation.html', { 'cart':cart})
+
+
+
 def order_confirmation(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     cart = Cart(request)
     
     return render(request, 'order_confirmation.html', {'order': order, 'cart':cart})
+
+
+
 
 
 
@@ -80,108 +91,8 @@ def proceed_checkout(request):
         return redirect('cart')
     
 
-    messages.success(request, "Proceeding to checkout")
+ 
     return redirect('checkout')
-
-
-
-
-
-
-
-
-
-
-
-
-# def checkout(request):
-    
-#    product = Product.objects.all()
-#    cart = Cart(request)
-#    product_count = cart.get_product_count()
-    
-#    if request.method == 'POST':
-#         form = CheckoutForm(request.POST)
-#         if form.is_valid():
-#             first_name = form.cleaned_data['first_name']
-#             last_name = form.cleaned_data['last_name']
-#             company_name = form.cleaned_data['company_name']
-#             address = form.cleaned_data['address']
-#             house_number_street_name = form.cleaned_data['house_number_street_name']
-#             town_city = form.cleaned_data['town_city']
-#             country = form.cleaned_data['country']
-#             postcode_zip = form.cleaned_data['postcode_zip']
-#             mobile = form.cleaned_data['mobile']
-#             email_address = form.cleaned_data['email_address']
-#             create_account = form.cleaned_data['create_account']
-#             ship_to_different_address = form.cleaned_data['ship_to_different_address']
-#             payment_method = form.cleaned_data['payment_method']
-
-#             cart = get_object_or_404(Carts, user=request.user)
-#             cart_items = OrderItem.objects.filter(cart=cart)
-
-          
-#             total_price = 0
-#             for item in cart_items:
-#                 item.sub_total = item.product.price * item.quantity
-#                 total_price += item.sub_total
-
-          
-#             order = Order.objects.create(
-#                 user=request.user,
-#                 first_name=first_name,
-#                 last_name=last_name,
-#                 company_name=company_name,
-#                 address=address,
-#                 house_number_street_name=house_number_street_name,
-#                 town_city=town_city,
-#                 country=country,
-#                 postcode_zip=postcode_zip,
-#                 mobile=mobile,
-#                 email_address=email_address,
-#                 total_price=total_price,
-#                 payment_method=','.join(payment_method)  
-#             )
-
-          
-#             if ship_to_different_address:
-              
-#                 pass
-
-          
-#             cart_items.delete()
-
-#             return redirect('order_confirmation', order_id=order.id)
-#    else:
-#         form = CheckoutForm()
-    
-
-#         cart = get_object_or_404(Carts, user=request.user)
-#         cart_items = OrderItem.objects.filter(cart=cart)
-    
-   
-#         for item in cart_items:
-#             item.sub_total = item.product.price * item.quantity
-    
-#    return render(request, 'checkout.html',{'cart':cart, 'form':form, 'product':product, 'product_count':product_count})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -189,8 +100,9 @@ def proceed_checkout(request):
 
 def checkout(request):
     product = Product.objects.all()
-    cart = Cart(request)
-    product_count = cart.get_product_count()
+    
+    carts=Cart(request)
+    product_count =carts.get_product_count()
     
     
     if request.method == 'POST':
@@ -208,16 +120,22 @@ def checkout(request):
             email_address = form.cleaned_data['email_address']
             create_account = form.cleaned_data['create_account']
             ship_to_different_address = form.cleaned_data['ship_to_different_address']
+            
+
             payment_method = form.cleaned_data['payment_method']
+
+            cart = Carts.objects.all()
+            cart_items = OrderItem.objects.all()
+
           
-            cart = get_object_or_404(Carts, user=request.user)
-            cart_items = OrderItem.objects.filter(cart=cart)
+            total_price = 0
+            for item in cart_items:
+                items = item.product.price * item.quantity
+                total_price = items * total_price 
 
-        
-            total_price = sum(item.product.price * item.quantity for item in cart_items)
-
+          
             order = Order.objects.create(
-               user=request.user,
+                user=request.user,
                 first_name=first_name,
                 last_name=last_name,
                 company_name=company_name,
@@ -229,17 +147,31 @@ def checkout(request):
                 mobile=mobile,
                 email_address=email_address,
                 total_price=total_price,
+               
                 payment_method=','.join(payment_method)  
             )
 
-         
-            cart_items.delete()
+          
+            if ship_to_different_address:
+              
+                pass
 
+          
+            cart_items.delete()
+        
             return redirect('order_confirmation', order_id=order.id)
     else:
         form = CheckoutForm()
     
-    return render(request, 'checkout.html',{'cart':cart, 'form':form, 'product':product, 'product_count':product_count})
+
+    cart= Carts.objects.all()
+    cart_items = OrderItem.objects.all()
+    
+   
+    for item in cart_items:
+        items = item.product.price * item.quantity
+
+    return render(request, 'checkout.html', {'form': form, 'cart':cart, 'cart_items':cart_items,  'product':product, 'product_count':product_count, 'carts':carts})
 
 
 
@@ -251,7 +183,7 @@ def cart(request):
     # carts = Cart(request)
    
     product_count = cart.get_product_count()
-    return render(request, 'cart.html', {'cart':cart, 'product':product, 'product_count':product_count})
+    return render(request, 'cart.html', {'cart':cart, 'product':product, 'product_count':product_count, })
 
 
 

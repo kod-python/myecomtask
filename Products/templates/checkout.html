@@ -44,6 +44,10 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet" />
   </head>
 
+
+
+
+
   <body>
     <!-- Spinner Start -->
     <div
@@ -201,7 +205,7 @@
         <h1 class="mb-4">Billing details</h1>
 
         <div class="table-responsive">
-          {% for item in cart %}
+          {% for item in carts %}
           <table class="table">
             <thead>
               <tr>
@@ -299,7 +303,7 @@
                 <td class="py-5"></td>
                 <td class="py-5">
                   <div class="py-3 border-bottom border-top">
-                    <p class="mb-0 text-dark">{{cart.get_total_price}}</p>
+                    <p class="mb-0 text-dark">{{carts.get_total_price}}</p>
                   </div>
                 </td>
               </tr>
@@ -309,56 +313,56 @@
 
 
 
-        <form method="post" action="{% url 'checkout' %}">
+        <form method="POST" action="">
           {% csrf_token %}
          {{ form.non_field_errors }} 
           <div>
               <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
-              {{ form.first_name }}
+              <p>{{ form.first_name }}</p>
           </div>
           <div>
               <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
-              {{ form.last_name }}
+              <p>{{ form.last_name }}</p>
           </div>
           <div>
               <label for="{{ form.company_name.id_for_label }}">{{ form.company_name.label }}</label>
-              {{ form.company_name }}
+             <p> {{ form.company_name }}</p>
           </div>
           <div>
               <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
-              {{ form.address }}
+             <p>{{ form.address }}</p> 
           </div>
           <div>
               <label for="{{ form.house_number_street_name.id_for_label }}">{{ form.house_number_street_name.label }}</label>
-              {{ form.house_number_street_name }}
+              <p>{{ form.house_number_street_name }}</p>
           </div>
           <div>
               <label for="{{ form.town_city.id_for_label }}">{{ form.town_city.label }}</label>
-              {{ form.town_city }}
+             <p> {{ form.town_city }}</p>
           </div>
           <div>
               <label for="{{ form.country.id_for_label }}">{{ form.country.label }}</label>
-              {{ form.country }}
+             <p>{{ form.country }}</p> 
           </div>
           <div>
               <label for="{{ form.postcode_zip.id_for_label }}">{{ form.postcode_zip.label }}</label>
-              {{ form.postcode_zip }}
+              <p>{{ form.postcode_zip }}</p>
           </div>
           <div>
               <label for="{{ form.mobile.id_for_label }}">{{ form.mobile.label }}</label>
-              {{ form.mobile }}
+             <p>{{ form.mobile }}</p> 
           </div>
           <div>
               <label for="{{ form.email_address.id_for_label }}">{{ form.email_address.label }}</label>
-              {{ form.email_address }}
+             <p>{{ form.email_address }}</p> 
           </div>
           <div>
               <label for="{{ form.create_account.id_for_label }}">{{ form.create_account.label }}</label>
-              {{ form.create_account }}
+             <p>{{ form.create_account }}</p> 
           </div>
           <div>
               <label for="{{ form.ship_to_different_address.id_for_label }}">{{ form.ship_to_different_address.label }}</label>
-              {{ form.ship_to_different_address }}
+              <p>{{ form.ship_to_different_address }}</p>
           </div>
           
           <fieldset>
@@ -369,7 +373,7 @@
                       <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
                   </div>
               {% endfor %}
-          </fieldset>
+          </fieldset><br>
           
         
           

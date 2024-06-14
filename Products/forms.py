@@ -13,6 +13,7 @@ class CheckoutForm(forms.Form):
     postcode_zip = forms.CharField(max_length=20, label='Postcode/Zip*')
     mobile = forms.CharField(max_length=20, label='Mobile*')
     email_address = forms.EmailField(label='Email Address*')
+   
     create_account = forms.BooleanField(required=False, label='Create an account?')
     ship_to_different_address = forms.BooleanField(required=False, label='Ship to a different address?')
 

@@ -1,9 +1,11 @@
 from django.urls import path
+# from django.contrib import admin
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
+    # path('admin/', admin.site.urls),
     path('', views.index, name = 'index'),
     path('register', views.register, name = 'register'),
     path('login', views.login,  name = 'login'),
@@ -15,9 +17,13 @@ urlpatterns = [
     path('remove/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('clear/', views.clear_cart, name='clear_cart'),
     path('checkout', views.checkout, name="checkout"),
+     path('order-id/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
+    # path('order_confirmation', views.order_confirmation, name='order_confirmation'),
     path('proceed-checkout/', views.proceed_checkout, name='procced_checkout'),
+    
     path('testimonial', views.testimonial, name="testimonial"),
-    path('order_id/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
+    # path('order-id/<int:order_id>/', views.order_confirmation, name='order_confirmation'),
+   
 ]
 
 
