@@ -76,8 +76,8 @@ def shop_detail(request, id):
 def order_confirmation(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     cart = Cart(request)
-    
-    return render(request, 'order_confirmation.html', {'order': order, 'cart':cart})
+    product_count = cart.get_product_count()
+    return render(request, 'order_confirmation.html',{'order': order, 'cart':cart, 'product_count':product_count})
 
 
 
@@ -102,7 +102,7 @@ def checkout(request):
     product = Product.objects.all()
     
     carts=Cart(request)
-    product_count =carts.get_product_count()
+    product_count = carts.get_product_count()
     
     
     if request.method == 'POST':
@@ -131,7 +131,7 @@ def checkout(request):
             total_price = 0
             for item in cart_items:
                 items = item.product.price * item.quantity
-                total_price = items * total_price 
+                total_price += sum(items) 
 
           
             order = Order.objects.create(
@@ -158,6 +158,7 @@ def checkout(request):
 
           
             cart_items.delete()
+            # order.clear()
         
             return redirect('order_confirmation', order_id=order.id)
     else:
@@ -170,9 +171,9 @@ def checkout(request):
    
     for item in cart_items:
         items = item.product.price * item.quantity
+       
 
     return render(request, 'checkout.html', {'form': form, 'cart':cart, 'cart_items':cart_items,  'product':product, 'product_count':product_count, 'carts':carts})
-
 
 
 
@@ -198,9 +199,6 @@ def add_to_cart(request, id):
     
     messages.success(request, "Product added to cart successfully")
     return redirect('cart')
-
-
-
 
 
 
@@ -242,9 +240,6 @@ def clear_cart(request):
     
     
     
-    
-
-
 # FOR FORMS
 
 def register(request):
@@ -276,7 +271,6 @@ def register(request):
         
     else:    
       return render(request, 'register.html')
-
 
 
 
