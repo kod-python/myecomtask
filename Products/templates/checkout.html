@@ -313,7 +313,32 @@
 
 
 
-        <form method="POST" action="">
+
+
+        <form method="post" action="">
+          {% csrf_token %}
+          <!-- {{ form.non_field_errors }} -->
+    
+          {{ form.as_p }}
+    
+         
+          <!-- <p>{{order.total_price}}</p> -->
+          
+          <p>Sub Total:{{cart.get_total_price}} Ghc </p>
+    
+          <button type="submit" class="btn border-secondary">Place Order</button>
+    
+          
+        </form>
+    
+
+
+
+
+
+        <!-- RESERVER MODE -->
+
+        <!-- <form method="POST" action="">
           {% csrf_token %}
          {{ form.non_field_errors }} 
           <div>
@@ -378,7 +403,7 @@
         
           
           <button type="submit" class="btn border-secondary">Place Order</button>
-      </form>
+      </form> -->
       
      
 

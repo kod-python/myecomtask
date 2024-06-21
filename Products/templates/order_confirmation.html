@@ -143,6 +143,8 @@
 
     <p>Order ID: {{ order.id }}</p> 
     <hr>
+    <p>Username: {{order.username}}</p>
+    <hr>
     <p>first_name: {{ order.first_name }}</p>
     <hr>
     <p>last_name: {{ order.last_name }}</p>
@@ -163,7 +165,8 @@
     <hr>
     <p> payment_method  : {{ order.payment_method   }}</p>
     <hr>
-    <p>Subtotal :{{order.total_price}}</p>
+   
+    <p>Subtotal :{{order.get_total_cost}}</p>
     <hr>
 
 
@@ -175,8 +178,11 @@
 {% endfor %}
 
 <p>Sub Total: {{cart.get_total_price}}</p>
+<button type="submit" class="btn border-secondary">
+    <a href="{% url 'index' %}">Continue Shopping</a>
+</button>
 
-    <a href="{% url 'index' %}">continue shopping </a>
+   
 
 
 

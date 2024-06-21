@@ -81,12 +81,14 @@
           </div>
 
           {% if user.is_authenticated %}
-          <a href="login"><button type="submit">Logout</button></a>
-
+          <a href="login"><button type="submit" class="btn border-secondary">Logout</button></a>
+           
           {% else %}
           <a href="register"><button type="submit">Login or signup</button></a>
           {% endif %}
         </div>
+
+        <h1>Welcome {{user.username}}</h1>
       </div>
       <div class="container px-0">
         <nav class="navbar navbar-light bg-white navbar-expand-xl">
@@ -398,7 +400,7 @@
                           <div class="fruite-img">
                             <img
                               src="{{feature.image.url}}"
-                              class="img-fluid w-100 rounded-top"
+                              class=" "
                               alt=""
                             />
                           </div>

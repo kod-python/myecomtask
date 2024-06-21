@@ -8,9 +8,10 @@ from .cart import Cart
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Order, OrderItem ,Carts
+from .models import Order, OrderItem 
 import uuid
 from .forms import CheckoutForm
+from django.core.mail import send_mail
 
 
 # Create your views here
@@ -96,84 +97,171 @@ def proceed_checkout(request):
 
 
 
-
-
 def checkout(request):
     product = Product.objects.all()
-    
-    carts=Cart(request)
-    product_count = carts.get_product_count()
-    
-    
+  
+    cart = Cart(request)
+    product_count = cart.get_product_count()
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            company_name = form.cleaned_data['company_name']
-            address = form.cleaned_data['address']
-            house_number_street_name = form.cleaned_data['house_number_street_name']
-            town_city = form.cleaned_data['town_city']
-            country = form.cleaned_data['country']
-            postcode_zip = form.cleaned_data['postcode_zip']
-            mobile = form.cleaned_data['mobile']
-            email_address = form.cleaned_data['email_address']
-            create_account = form.cleaned_data['create_account']
-            ship_to_different_address = form.cleaned_data['ship_to_different_address']
+            order = form.save()
             
+            
+       
+            if form.cleaned_data['create_account']:
+                username = form.cleaned_data['username']
+                email = form.cleaned_data['email_address']
+                password = User.objects.make_random_password()
+                
+                # Create the user account
+                user = User(
+                    username=username,      
+                    email=email, 
+                    password=password,
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name']
+                )
+                   
+                   
+                #   send_welcome_email(user)
+                #   assign_default_permissions(user)
 
-            payment_method = form.cleaned_data['payment_method']
-
-            cart = Carts.objects.all()
-            cart_items = OrderItem.objects.all()
-
-          
-            total_price = 0
-            for item in cart_items:
-                items = item.product.price * item.quantity
-                total_price += sum(items) 
-
-          
-            order = Order.objects.create(
-                user=request.user,
-                first_name=first_name,
-                last_name=last_name,
-                company_name=company_name,
-                address=address,
-                house_number_street_name=house_number_street_name,
-                town_city=town_city,
-                country=country,
-                postcode_zip=postcode_zip,
-                mobile=mobile,
-                email_address=email_address,
-                total_price=total_price,
-               
-                payment_method=','.join(payment_method)  
-            )
-
-          
-            if ship_to_different_address:
-              
-                pass
-
-          
-            cart_items.delete()
-            # order.clear()
+                # Send email with account details
+                # send_mail(
+                #     'Your Account Details',
+                #     f'Your account has been created. Your password is: {password}',
+                #     'from@example.com',  # Replace with your from email
+                #     [email],
+                #     fail_silently=False,
+                # )
+                
+                # print(send_mail)
         
-            return redirect('order_confirmation', order_id=order.id)
+            
+          
+            for item in cart:
+                OrderItem.objects.create(
+                    order=order,
+                   
+                    product = item['product'],
+                    price=item['price'],
+                    quantity=item['quantity'],
+                    total_price=item['total_price']
+                    
+                    
+                   
+                    
+                   
+             )
+     
+            
+            cart.clear()      
+                   
+        
+            return redirect('order_confirmation', order_id=order.id, )
     else:
         form = CheckoutForm()
+    return render(request, 'checkout.html', {'form':form, 'cart':cart, 'product':product, 'product_count':product_count})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# RESERVER MODE
+# def checkout(request):
+#     product = Product.objects.all()
+    
+#     carts=Cart(request)
+#     product_count = carts.get_product_count()
+    
+    
+#     if request.method == 'POST':
+#         form = CheckoutForm(request.POST)
+#         if form.is_valid():
+#             first_name = form.cleaned_data['first_name']
+#             last_name = form.cleaned_data['last_name']
+#             company_name = form.cleaned_data['company_name']
+#             address = form.cleaned_data['address']
+#             house_number_street_name = form.cleaned_data['house_number_street_name']
+#             town_city = form.cleaned_data['town_city']
+#             country = form.cleaned_data['country']
+#             postcode_zip = form.cleaned_data['postcode_zip']
+#             mobile = form.cleaned_data['mobile']
+#             email_address = form.cleaned_data['email_address']
+#             create_account = form.cleaned_data['create_account']
+#             ship_to_different_address = form.cleaned_data['ship_to_different_address']
+            
+
+#             payment_method = form.cleaned_data['payment_method']
+
+#             cart = Carts.objects.all()
+#             cart_items = OrderItem.objects.all()
+
+#             print("Cart contents :", cart_items)
+          
+#             total_price = 0 
+#             for item in cart_items:
+#                 total_price += item.product.price * item.quantity
+#                 # total_price += items
+
+            
+#             print("sub total : ", total_price)
+
+          
+#             order = Order.objects.create(
+#                 user=request.user,
+#                 first_name=first_name,
+#                 last_name=last_name,
+#                 company_name=company_name,
+#                 address=address,
+#                 house_number_street_name=house_number_street_name,
+#                 town_city=town_city,
+#                 country=country,
+#                 postcode_zip=postcode_zip,
+#                 mobile=mobile,
+#                 email_address=email_address,
+#                 total_price=total_price,
+               
+#                 payment_method=','.join(payment_method)  
+#             )
+
+          
+#             if ship_to_different_address:
+              
+#                 pass
+
+          
+#             cart_items.delete()
+#             # order.clear()
+        
+#             return redirect('order_confirmation', order_id=order.id)
+#     else:
+#         form = CheckoutForm()
     
 
-    cart= Carts.objects.all()
-    cart_items = OrderItem.objects.all()
+#     cart= Carts.objects.all()
+#     cart_items = OrderItem.objects.all()
     
    
-    for item in cart_items:
-        items = item.product.price * item.quantity
-       
+#     for item in cart_items:
+#         items = item.product.price * item.quantity
+#         total_price += items 
 
-    return render(request, 'checkout.html', {'form': form, 'cart':cart, 'cart_items':cart_items,  'product':product, 'product_count':product_count, 'carts':carts})
+#     return render(request, 'checkout.html', {'form': form, 'cart':cart, 'cart_items':cart_items,  'product':product, 'product_count':product_count, 'carts':carts})
 
 
 
@@ -271,6 +359,8 @@ def register(request):
         
     else:    
       return render(request, 'register.html')
+
+
 
 
 
