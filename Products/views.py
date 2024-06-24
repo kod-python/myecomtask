@@ -78,6 +78,7 @@ def order_confirmation(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     cart = Cart(request)
     product_count = cart.get_product_count()
+    messages.success(request, "Your order has been placed successfully, Thank you!!")
     return render(request, 'order_confirmation.html',{'order': order, 'cart':cart, 'product_count':product_count})
 
 
@@ -108,35 +109,39 @@ def checkout(request):
             order = form.save()
             
             
-       
-            if form.cleaned_data['create_account']:
-                username = form.cleaned_data['username']
-                email = form.cleaned_data['email_address']
+            if form.cleaned_data.get('create_account'):
+                username = form.cleaned_data.get('username')
+                email = form.cleaned_data.get('email_address')
                 password = User.objects.make_random_password()
                 
-                # Create the user account
-                user = User(
-                    username=username,      
-                    email=email, 
-                    password=password,
-                    first_name=form.cleaned_data['first_name'],
-                    last_name=form.cleaned_data['last_name']
-                )
-                   
-                   
-                #   send_welcome_email(user)
-                #   assign_default_permissions(user)
-
-                # Send email with account details
-                # send_mail(
-                #     'Your Account Details',
-                #     f'Your account has been created. Your password is: {password}',
-                #     'from@example.com',  # Replace with your from email
-                #     [email],
-                #     fail_silently=False,
-                # )
-                
-                # print(send_mail)
+                try:
+                    
+                    user = User.objects.create_user(
+                        username=username,      
+                        email=email, 
+                        password=password,
+                        first_name=form.cleaned_data.get('first_name'),
+                        last_name=form.cleaned_data.get('last_name')
+                    )
+                    user.save()
+                    
+                    print(user)
+                    
+                    send_mail(
+                        'Your Account Details',
+                        f'Hello {user.first_name},\n\nYour account has been created. Your username is: {username} and your password is: {password}\n\nPlease change your password after logging in for the first time.\n\nThank you!',
+                        'krist_table@yahoo.com', 
+                        [email],
+                        fail_silently=False,
+                    )
+                    
+                    print(send_mail)
+                     
+                except Exception as e:
+                  
+                    print(f"Error creating user or sending email: {e}")
+   
+          
         
             
           
@@ -285,7 +290,7 @@ def add_to_cart(request, id):
     cart = Cart(request)
     cart.add(product_id=product.id, quantity=quantity)
     
-    messages.success(request, "Product added to cart successfully")
+    # messages.success(request, "Product added to cart successfully")
     return redirect('cart')
 
 
