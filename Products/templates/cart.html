@@ -285,13 +285,17 @@ input{
           {% endfor %}
         </div>
        
+    
+        <a href="{% url 'shop' %}">
+         <button type="submit" class="btn border-secondary">Add More To Cart</button>
+
+        </a><br><br>
+        
+
         <form method="post" action="{% url 'clear_cart' %}">
           {% csrf_token %}
           <button type="submit" class="btn border-secondary">Clear Cart</button>
         </form>
-        
-
-
 
         <div class="mt-5">
           <input
