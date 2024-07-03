@@ -391,15 +391,15 @@
               <div class="row g-4">
                 <div class="col-lg-12">
                   <div class="row g-4">
-                    {% for feature in features %}
+                    {% for product in allproduct %}
                     <div class="col-md-6 col-lg-4 col-xl-3">
                       <div class="rounded position-relative fruite-item">
 
                        
-                        <a href="{% url 'shop' %}">
+                        <a href="{% url 'shop_detail' product.id %}"">
                           <div class="fruite-img">
                             <img
-                              src="{{feature.image.url}}"
+                              src="{{product.image.url}}"
                               class=" "
                               alt=""
                             />
@@ -412,7 +412,7 @@
                           class="text-white bg-secondary px-3 py-1 rounded position-absolute"
                           style="top: 10px; left: 10px"
                         >
-                          {{ feature.category }}
+                          {{ product.category }}
                         </div>
                        
                     
@@ -421,7 +421,7 @@
                         >
 
                         
-                          <h4>{{feature.name}}</h4>
+                          <h4>{{product.name}}</h4>
                           <!-- <p>{{feature.desc}}</p>
                           <p>{{feature.Classification}}</p> -->
 

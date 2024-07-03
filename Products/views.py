@@ -28,12 +28,12 @@ def index(request):
    
     bestsellers = Product.objects.filter(is_bestseller=True)
     
-    
+    allproduct = Product.objects.all()
     # allfeatures = Product.objects.filter(is_allfeatures=True)
     
     product_count = cart.get_product_count()
     
-    return render(request, 'index.html', {'features':features, 'categorys':categorys, 'bestsellers':bestsellers, 'organics':organics, 'inorganics':inorganics, 'product_count':product_count})
+    return render(request, 'index.html', {'features':features, 'categorys':categorys, 'bestsellers':bestsellers, 'organics':organics, 'inorganics':inorganics, 'product_count':product_count, 'allproduct':allproduct})
 
 
 def shop(request):
