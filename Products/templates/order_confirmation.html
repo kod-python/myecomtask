@@ -166,7 +166,7 @@
     <p> payment_method  : {{ order.payment_method   }}</p>
     <hr>
    
-    <p>Subtotal :{{order.get_total_cost}}</p>
+    <p>Sub Total :{{order.get_total_cost}}</p>
     <hr>
 
 
@@ -177,7 +177,6 @@
   
 {% endfor %}
 
-<p>Sub Total: {{cart.get_total_price}}</p>
 <button type="submit" class="btn border-secondary">
     <a href="{% url 'index' %}">Continue Shopping</a>
 </button>
